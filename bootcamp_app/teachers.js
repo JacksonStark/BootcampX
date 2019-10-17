@@ -16,10 +16,10 @@ FROM teachers
 JOIN assistance_requests ON teacher_id = teachers.id
 JOIN students ON students.id = student_id
 JOIN cohorts ON cohorts.id = cohort_id
-WHERE cohorts.name LIKE '%${cohortMonth}%'
+WHERE cohorts.name LIKE $1
 ORDER BY teacher_name
-LIMIT ${maxResults || 5};
-`)
+LIMIT $2;
+`, [`%${cohortMonth}%`, `${maxResults || 5}`])
 .then(res => {
   res.rows.forEach(teacher => {
     console.log(`${teacher.cohort_name}: ${teacher.teacher_name}`)
